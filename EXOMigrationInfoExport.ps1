@@ -1,20 +1,20 @@
-# Controleer of de ExchangeOnlineManagement-module is geïnstalleerd
+# Verify that the ExchangeOnlineManagement module is installed
 $requiredVersion = [System.Version]::new(3, 2, 0)
 $moduleName = "ExchangeOnlineManagement"
 
-# Zoek alle versies van de ExchangeOnlineManagement-module
+# Locate all versions of the ExchangeOnlineManagement module
 $moduleVersions = Get-Module -ListAvailable | Where-Object { $_.Name -eq $moduleName } | Sort-Object Version -Descending
 
 if ($moduleVersions.Count -gt 0) {
     $latestVersion = $moduleVersions[0].Version
 
     if ($latestVersion -ge $requiredVersion) {
-        Write-Host "ExchangeOnlineManagement module versie $($latestVersion.ToString()) is geïnstalleerd en voldoet aan de minimale vereiste versie van $($requiredVersion.ToString())."
+        Write-Host "ExchangeOnlineManagement module version $($latestVersion.ToString()) is installed and meets the minimum required version of $($requiredVersion.ToString())."
     } else {
-        Write-Host "De geïnstalleerde versie van ExchangeOnlineManagement module ($($latestVersion.ToString())) is niet compatibel met de vereiste versie van $($requiredVersion.ToString())."
+        Write-Host "The installed version of ExchangeOnlineManagement module ($($latestVersion.ToString())) is not compatible with the required version of $($requiredVersion.ToString())."
     }
 } else {
-    Write-Host "De ExchangeOnlineManagement-module is niet geïnstalleerd."
+    Write-Host "The ExchangeOnlineManagement module is not installed."
     if (Check-ModuleInstallationPermission) {
         Install-Module powershellget -force
         Install-Module -Name ExchangeOnlineManagement -force
@@ -30,7 +30,7 @@ $usermailbox2 = "email address2"
 $usermailbox3 = "email address3"
 
 
-# Archive Status Controleren 
+# Archive Status Check
 
 
 $ArchiveResult1 = Get-EXOMailbox -Identity $usermailbox1 -PropertySets Archive
@@ -38,14 +38,14 @@ $ArchiveResult2 = Get-EXOMailbox -Identity $usermailbox2 -PropertySets Archive
 $ArchiveResult3 = Get-EXOMailbox -Identity $usermailbox3 -PropertySets Archive
 
 
-# Haal de licenties van de gebruiker op
+# Get the user's licenses
 
 $licenses1 = Get-MsolUser -UserPrincipalName $usermailbox1 | Select-Object -ExpandProperty Licenses
 $licenses2 = Get-MsolUser -UserPrincipalName $usermailbox2 | Select-Object -ExpandProperty Licenses
 $licenses3 = Get-MsolUser -UserPrincipalName $usermailbox3 | Select-Object -ExpandProperty Licenses
 
 
-# Exporteren naar Log FIle
+# Export to Log File
 
 Start-Transcript -Path "c:\temp\archivestatus.txt"
 
@@ -89,34 +89,34 @@ Stop-Transcript
 
 
 function Check-ModuleInstallationPermission {
-    # Controleer de uitvoeringsbeleidsinstelling
+    # Check the execution policy setting
     $executionPolicy = Get-ExecutionPolicy
     if ($executionPolicy -eq "Restricted" -or $executionPolicy -eq "AllSigned") {
         Write-Host "Je hebt momenteel geen toestemming om modules te installeren vanwege de huidige uitvoeringsbeleidsinstelling ($executionPolicy)."
         return $false
     }
 
-    # Controleer of de gebruiker beheerdersrechten heeft
+    # Verify that the user has administrative privileges
     $currentUser = [Security.Principal.WindowsIdentity]::GetCurrent()
     $currentUserPrincipal = New-Object Security.Principal.WindowsPrincipal($currentUser)
 
     if (!$currentUserPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-        Write-Host "Je hebt beheerdersrechten nodig om modules te installeren.Start Powershell als Administrator"
+        Write-Host "You need administrator privileges to install modules. Run Powershell as Administrator"
         return $false
     }
 
     return $true
 }
 
-# Roep de functie aan om te controleren of de gebruiker een module mag installeren
+# Call the function to check if the user is allowed to install a module
 $canInstallModule = Check-ModuleInstallationPermission
 
 if ($canInstallModule) {
-    Write-Host "Je hebt toestemming om modules te installeren. Voer hier de installatiecode in."
-    # Plaats hier de code om de gewenste module te installeren
-    # Bijvoorbeeld: Install-Module -Name ModuleNaam -Scope CurrentUser
+    Write-Host "You have permission to install modules. Enter the installation code here."
+    # Place the code here to install the desired module
+    # Example: Install-Module -Name ModuleNaam -Scope CurrentUser
 } else {
-    Write-Host "Je hebt momenteel geen toestemming om modules te installeren. Start Powershell als Administrator"
+    Write-Host "You currently do not have permission to install modules. Run Powershell as Administrator"
 }
 
 
