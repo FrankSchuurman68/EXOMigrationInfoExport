@@ -27,66 +27,39 @@ Connect-MsolService
 
 # Array with email addresses
 $UserMailBoxAddress = @(
- "email address1"
- "email address2"
- "email address3"
+ "email_address1"
+ "email_address2"
+ "email_address3"
 )
 
-# Archive Status Check
+foreach ($user in $UserMailBoxAddress) {
 
+    Start-Transcript -Path "c:\temp\archivestatus$user.txt"
 
-$ArchiveResult1 = Get-EXOMailbox -Identity $usermailbox1 -PropertySets Archive
-$ArchiveResult2 = Get-EXOMailbox -Identity $usermailbox2 -PropertySets Archive
-$ArchiveResult3 = Get-EXOMailbox -Identity $usermailbox3 -PropertySets Archive
+    # Archive Status Controleren 
+   $ArchiveResult = Get-EXOMailbox -Identity $user -PropertySets Archive
+   $ArchiveResult
 
-# Get the user's licenses
+   Stop-Transcript
 
-$licenses1 = Get-MsolUser -UserPrincipalName $usermailbox1 | Select-Object -ExpandProperty Licenses
-$licenses2 = Get-MsolUser -UserPrincipalName $usermailbox2 | Select-Object -ExpandProperty Licenses
-$licenses3 = Get-MsolUser -UserPrincipalName $usermailbox3 | Select-Object -ExpandProperty Licenses
+   Start-Transcript -Path "c:\temp\archiveuserlicenses$user.txt"
 
-# Export to Log File
+   # Haal de licenties van de gebruiker op
+   $licenses = Get-MsolUser -UserPrincipalName $user | Select-Object -ExpandProperty Licenses
+   $licenses | Format-Table -Property AccountSkuId, SkuPartNumber, ConsumedUnits, ActiveUnits
 
-Start-Transcript -Path "c:\temp\archivestatus.txt"
+   Stop-Transcript
 
-$ArchiveResult1
-$ArchiveResult2
-$ArchiveResult3
+   Start-Transcript -Path "c:\temp\$user.txt"
+   
+   Get-Mailbox $user | Format-List pers*
+   Get-Mailbox $user | Format-List *quota*,*xloc*
+   Get-Mailbox $user -Archive | Format-List *AutoExpandingArchiveEnabled*
+   Get-MailboxStatistics $user -Archive | Format-List name,*itemsize*
+   
+   Stop-Transcript
 
-Stop-Transcript
-
-Start-Transcript -Path "c:\temp\archiveuserlicenses.txt"
-
-$usermailbox1
-$licenses1 | Format-Table -Property AccountSkuId, SkuPartNumber, ConsumedUnits, ActiveUnits
-$usermailbox2
-$licenses2 | Format-Table -Property AccountSkuId, SkuPartNumber, ConsumedUnits, ActiveUnits
-$usermailbox3
-$licenses3 | Format-Table -Property AccountSkuId, SkuPartNumber, ConsumedUnits, ActiveUnits
-
-Stop-Transcript
-
-Start-Transcript -Path "c:\temp\$usermailbox1.txt"
-Get-Mailbox $usermailbox1 | Format-List pers*
-Get-Mailbox $usermailbox1 | Format-List *quota*,*xloc*
-Get-Mailbox $usermailbox1 -Archive | Format-List *AutoExpandingArchiveEnabled*
-Get-MailboxStatistics $usermailbox1 -Archive | Format-List name,*itemsize*
-Stop-Transcript
-
-Start-Transcript -Path "c:\temp\$usermailbox2.txt"
-Get-Mailbox $usermailbox2 | Format-List pers*
-Get-Mailbox $usermailbox2 | Format-List *quota*,*xloc*
-Get-Mailbox $usermailbox2 -Archive | Format-List *AutoExpandingArchiveEnabled*
-Get-MailboxStatistics $usermailbox2 -Archive | Format-List name,*itemsize*
-Stop-Transcript
-
-Start-Transcript -Path "c:\temp\$usermailbox3.txt"
-Get-Mailbox $usermailbox3 | Format-List pers*
-Get-Mailbox $usermailbox3 | Format-List *quota*,*xloc*
-Get-Mailbox $usermailbox3 -Archive | Format-List *AutoExpandingArchiveEnabled*
-Get-MailboxStatistics $usermailbox3 -Archive | Format-List name,*itemsize*
-Stop-Transcript
-
+}
 
 function Check-ModuleInstallationPermission {
     # Check the execution policy setting
