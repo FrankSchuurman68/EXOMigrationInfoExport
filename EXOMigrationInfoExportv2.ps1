@@ -25,10 +25,12 @@ if ($moduleVersions.Count -gt 0) {
 Connect-ExchangeOnline
 Connect-MsolService
 
-$usermailbox1 = "email address1"
-$usermailbox2 = "email address2"
-$usermailbox3 = "email address3"
-
+# Array with email addresses
+$UserMailBoxAddress = @(
+ "email address1"
+ "email address2"
+ "email address3"
+)
 
 # Archive Status Check
 
@@ -37,13 +39,11 @@ $ArchiveResult1 = Get-EXOMailbox -Identity $usermailbox1 -PropertySets Archive
 $ArchiveResult2 = Get-EXOMailbox -Identity $usermailbox2 -PropertySets Archive
 $ArchiveResult3 = Get-EXOMailbox -Identity $usermailbox3 -PropertySets Archive
 
-
 # Get the user's licenses
 
 $licenses1 = Get-MsolUser -UserPrincipalName $usermailbox1 | Select-Object -ExpandProperty Licenses
 $licenses2 = Get-MsolUser -UserPrincipalName $usermailbox2 | Select-Object -ExpandProperty Licenses
 $licenses3 = Get-MsolUser -UserPrincipalName $usermailbox3 | Select-Object -ExpandProperty Licenses
-
 
 # Export to Log File
 
