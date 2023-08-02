@@ -63,7 +63,7 @@ foreach ($user in $UserMailBoxAddress) {
    Get-MigrationUser $user | fl
    Get-SyncRequest  -Mailbox $user | fl
    Get-SyncRequest  -Mailbox $user | Get-SyncRequestStatistics -IncludeReport -DiagnosticInfo "showtimeslots, verbose"
-   Get-SyncRequest  -Mailbox $user | Get-SyncRequestStatistics -IncludeReport -DiagnosticInfo "showtimeslots, verbose" | export-clixml C:\SyncRequest.xml
+   Get-SyncRequest  -Mailbox $user | Get-SyncRequestStatistics -IncludeReport -DiagnosticInfo "showtimeslots, verbose" | export-clixml C:\temp\SyncRequest$user.xml
    Get-MoveRequestStatistics $user -IncludeReport | Export-CliXml C:\temp\MoveRequest$user.xml
    Get-MigrationUserStatistics $user -IncludeReport |fl
  
