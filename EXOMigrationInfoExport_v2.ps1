@@ -52,11 +52,26 @@ foreach ($user in $UserMailBoxAddress) {
 
    Start-Transcript -Path "c:\temp\$user.txt"
    
+   echo "Generate Get-Mailbox Pers:"
    Get-Mailbox $user | Format-List pers*
    Get-Mailbox $user | Format-List *quota*,*xloc*
    Get-Mailbox $user -Archive | Format-List *AutoExpandingArchiveEnabled*
-   Get-MailboxStatistics $user -Archive | Format-List name,*itemsize*
    
+   echo "Generate Mailbox Statistics:"
+   Get-MailboxStatistics $user -Archive | Format-List name,*itemsize*
+
+   Get-MigrationUser $user | fl
+   Get-SyncRequest  -Mailbox $user | fl
+   Get-SyncRequest  -Mailbox $user | Get-SyncRequestStatistics -IncludeReport -DiagnosticInfo "showtimeslots, verbose"
+   Get-SyncRequest  -Mailbox $user | Get-SyncRequestStatistics -IncludeReport -DiagnosticInfo "showtimeslots, verbose" | export-clixml C:\SyncRequest.xml
+   Get-MoveRequestStatistics $user -IncludeReport | Export-CliXml C:\temp\MoveRequest$user.xml
+   Get-MigrationUserStatistics $user -IncludeReport |fl
+ 
+   $stats = Get-MoveRequestStatistics –Identity $user -DiagnosticInfo “verbose,showtimeslots,showtimeline” 
+   $stats.DiagnosticInfo
+ 
+   Get-MoveRequestStatistics -Identity $user -DiagnosticInfo 'verbose,showtimeslots' | export-clixml C:\temp\EXO_MoveReqStats$user.xml
+
    Stop-Transcript
 
 }
