@@ -7,9 +7,8 @@ This very simple script mitigates al lot of those issues and removes some requir
 
 ## How to use
 
-This version has no loops. So three email accounts are designated in variables, where the commands are executed. Add up to three email accounts in the variables and execute the script. The script expects a c:\temp folder to be 
-present and writeable.
+This requires that the latest version of the EXO Module is present and the Active Directory Module. As most admin have the Active Directory Module installed, there is no active check. For the EXO module it checks if the latest Module is installed, and if not, it will install the Module.
 
-## Whats Next (whislist)
+The script expects a c:\temp folder to be present and writeable.
 
-Working on creating a loop with the mailboxes from the list so no mailboxes need to be manually added.
+Before running the script you can add multiple usernames in the variable $UserMailBoxAddress. The script will loop them through and generate a minimum of 3 text files per mailbox.
