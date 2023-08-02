@@ -1,4 +1,4 @@
-# EXOMigrationInfoExport
+# EXOMigrationInfoExport V2
 
 We have had request from Microsoft Support to deliver logfiles en status of the migration of large (archive) mailboxes (more than 200Gb). The migration was done by staff outside our company but the results where not consistent 
 due to various reasons. Also commands send by Microsoft did not work in the environment. 
