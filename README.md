@@ -11,4 +11,6 @@ This requires that the latest version of the EXO Module is present and the Activ
 
 The script expects a c:\temp folder to be present and writeable.
 
-Before running the script you can add multiple usernames in the variable $UserMailBoxAddress. The script will loop them through and generate a minimum of 3 text files per mailbox.
+Before running the script you can add multiple usernames in the variable $UserMailBoxAddress. 
+
+The script will loop them through and generate a minimum of 3 text files per mailbox and 3 XML files per mailbox.
