@@ -67,7 +67,7 @@ foreach ($user in $UserMailBoxAddress) {
    Get-MoveRequestStatistics $user -IncludeReport | Export-CliXml C:\temp\MoveRequest$user.xml
    Get-MigrationUserStatistics $user -IncludeReport |fl
  
-   $stats = Get-MoveRequestStatistics –Identity $user -DiagnosticInfo “verbose,showtimeslots,showtimeline” 
+   $stats = Get-MoveRequestStatistics -Identity $user -DiagnosticInfo “verbose,showtimeslots,showtimeline” 
    $stats.DiagnosticInfo
  
    Get-MoveRequestStatistics -Identity $user -DiagnosticInfo 'verbose,showtimeslots' | export-clixml C:\temp\EXO_MoveReqStats$user.xml
